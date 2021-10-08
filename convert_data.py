@@ -1,11 +1,12 @@
 # Imports
 import sqlite3
 import pandas as pd
+import os
 
 # Main
 def main():
     # SQL connection
-    con = sqlite3.connect("raw-data/sql-murder-mystery.db")
+    con = sqlite3.connect("raw-data/sql/sql-murder-mystery.db")
 
     # Read tables
     read_table("interview", con)
@@ -16,8 +17,13 @@ def main():
     read_table("drivers_license", con)
     read_table("crime_scene_report", con)
     read_table("income", con)
-WITH interview as (SELECT * FROM interview JOIN person p ON p.id = person_id WHERE (name LIKE'%Annabel%' AND address_street_name = 'Franklin Ave') OR  (address_street_name = 'Northwestern Dr'))
 
+    # Split interviews dataframe
+    split_interviews()
+
+    # Remove interview data
+    if os.path.exists("raw-data/csv/interview.csv"):
+        os.remove("raw-data/csv/interview.csv")
 
 
 # Functions
@@ -30,7 +36,16 @@ def read_table(table, con):
     df = pd.DataFrame(sql_query)
 
     # Write CSV
-    df.to_csv(f"data/{table}.csv", index=False)
+    df.to_csv(f"raw-data/csv/{table}.csv", index=False)
+
+def split_interviews():
+    # Read data
+    interviews = pd.read_csv("raw-data/csv/interview.csv")
+
+    # Split data
+    for i in range(len(interviews)):
+        person_id = interviews.iloc[i, 0]
+        interviews.loc[[i]].to_csv(f"raw-data/csv/interviews/{person_id}.csv", index=False)
 
 # Run
 if __name__ == "__main__":
