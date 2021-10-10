@@ -18,18 +18,18 @@ def main():
     read_table("crime_scene_report", con)
     read_table("income", con)
 
-    # Split interviews dataframe
-    split_interviews()
-
     # Rename SQL city to R city
     r_city()
+
+    # Split interviews dataframe
+    split_crime_scene_report()
 
     # Pivot 
     pivot_data()
 
     # Remove interview data
-    if os.path.exists("raw-data/csv/interview.csv"):
-        os.remove("raw-data/csv/interview.csv")
+    if os.path.exists("raw-data/csv/crime_scene_report.csv"):
+        os.remove("raw-data/csv/crime_scene_report.csv")
 
 
 # Functions
@@ -44,21 +44,21 @@ def read_table(table, con):
     # Write CSV
     df.to_csv(f"raw-data/csv/{table}.csv", index=False)
 
-def split_interviews():
+def split_crime_scene_report():
     # Read data
-    interviews = pd.read_csv("raw-data/csv/interview.csv")
+    crime_scene_report = pd.read_csv("raw-data/csv/crime_scene_report.csv")
 
     # Split data
-    for i in range(len(interviews)):
-        person_id = interviews.iloc[i, 0]
-        interviews.loc[[i]].to_csv(f"raw-data/csv/interviews/{person_id}.csv", index=False)
+    for i in range(len(crime_scene_report)):
+        person_id = crime_scene_report.iloc[i, 0]
+        crime_scene_report.loc[[i]].to_csv(f"raw-data/csv/crime_scene_report/{person_id}.csv", index=False)
 
 def pivot_data():
     df = pd.read_csv("raw-data/csv/get_fit_now_member.csv")
 
-    df = df.pivot(columns="person_id")
+    df = df.pivot(columns="membership_status")
 
-    df.to_csv("raw-data/csv/get_fit_now_member.csv", index=False)
+    df.to_csv("raw-data/csv/test.csv", index=False)
 
 
 def r_city():
