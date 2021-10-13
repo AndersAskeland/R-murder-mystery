@@ -294,7 +294,7 @@ person %>%
 
 # Find car
 driver_licence %>%
-    ´filter(id %in% c(173289, 423327))
+    filter(id %in% c(173289, 423327))
 
 # Combine data - Easier to read
 combined_data <- left_join(x = person, y = driver_licence, by = c("license_id" = "id")) %>%
