@@ -34,6 +34,7 @@ course, you'll be able to solve the mystery.
 > step to solving the mystery is to retrieve the corresponding crime
 > scene report from the police department's database.
 
+## The data
 You have the following files at your disposal to solve the mystery:
 ![File structure](images/file_structure.png) You might notice that
 certain variables have a key and arrow associated to them.
@@ -44,14 +45,18 @@ certain variables have a key and arrow associated to them.
 ![Arrow](images/paste-9621EB24.png){width="82"}
 **Arrow**: Used to reference data in one table to those in another table (i.e. they are the same in both tables).
 
+<br/>
+
+#### Get data
 Download the data by running:
 
 ```{r eval=FALSE, class.source = 'fold-show'}
 ******
 ```
 
-PS: The police have no good system to collect crime scene reports. Therefore the file structure of the crime scene reports are somewhat different compared to the other data.
+PS: The police have no good system to collect crime scene reports. Therefore the file structure of the crime scene reports is somewhat different compared to the other data.
 
+## How to solve the mystery 
 ### Hard
 
 You can in in fact solve the entire mystery based on the information
@@ -68,12 +73,42 @@ along. You can also view a code example, if the hints are not enough.
 
 `r hint(id = 0, text = "If you can, try to refrain from using hints. If you are stuck at a section for more than 10 minutes, reveal the first hint and repeat. The last hint in any given sequence is the solution for that given part.")`
 
+<br/>
+
+#### Sections
 <button class="collapsible">
-
-Part 1
-
+Part 0
 </button>
+::: content
+<p>
+## Part 0: Read data
+Download and read the data. If you ever make use of the code solutions, the data for those are stored in the relative path of "raw-data/". You can use `here()` to set a relative path.
 
+`r hint(id = 1, text = "The data is packaged. You might need to use a tool to extract it.")`
+`r hint(id = 2, text = "Use 'unzip()' to extract the data.")`
+
+
+<br/>
+
+#### Solution code
+
+```{r eval=FALSE}
+# Unzip data
+unzip(here("raw-data/r-murder-mystery.zip"),
+      exdir = here("raw-data/"))
+
+```
+
+</p>
+:::
+
+
+
+
+
+<button class="collapsible">
+Part 1
+</button>
 ::: content
 <p>
 
@@ -90,13 +125,15 @@ select the column the column with the report interesting for you.
 `r hint(id = 5, text = "Data can be read with vroom() or read_csv()")`
 `r hint(id = 6, text = "You should use the dplyr functions filter and select")`
 
+<br/>
+
 #### Solution code
 
 ```{r eval=FALSE}
 # Function to read data
 read_crime_scene_report <- function(file_path) {
     vroom::vroom(
-        file_path,
+        here::here(file_path),
         col_types = vroom::cols(
             date = vroom::col_character(),
             type = vroom::col_character(),
@@ -107,10 +144,10 @@ read_crime_scene_report <- function(file_path) {
 }
 
 # Get a list of directories
-crime_scene_report_files <- fs::dir_ls(here::here("raw-data/csv/crime_scene_report/"))
+crime_scene_report_files <- dir_ls(here("raw-data/crime_scene_report/"))
     
 # Read data - This can take some time
-crime_scene_report_df <- purrr::map_dfr(crime_scene_report_files, read_crime_scene_report)
+crime_scene_report_df <- map_dfr(crime_scene_report_files, read_crime_scene_report)
 
 # Find crime scene report
 crime_scene_report_df %>% 
@@ -123,12 +160,11 @@ crime_scene_report_df %>%
 </p>
 :::
 
+
+
 <button class="collapsible">
-
 Part 2
-
 </button>
-
 ::: content
 <p>
 
@@ -142,10 +178,12 @@ Find the witness statement.
 `r hint(id = 4, text = "To find Annabel you  can use regular expresions and the stringr function str_detect()")`
 `r hint(id = 6, text = "Look in the person data, and look for person that lives at the last house on Northwestern Dr and a person named Annabel that lives on Franklin Ave")`
 
+<br/>
+
 #### Solution code
 ```{r eval=FALSE}
 # Read person data
-person <- vroom::vroom("raw-data/csv/person.csv")
+person <- vroom(here("raw-data/person.csv"))
 
 # Find person living on the last house on Northwestern Dr
 person %>% 
@@ -157,32 +195,30 @@ person %>%
     dplyr::filter(address_street_name == "Franklin Ave" &
                      stringr::str_detect(name, "Annabel"))
 ```
-
 </p>
 :::
 
+
 <button class="collapsible">
-
 Part 3
-
 </button>
-
 ::: content
 <p>
 ## Part 3 - Look at witness statement
 Find the witness statements.
-`r hint(id = 1, text = "Look for a witness statement with a matching "id")`
-`r hint(id = 2, text = "Annabel Miller has a id of 16371")`
-`r hint(id = 3, text = "Morty Schapiro has a id of 14887")`
-`r hint(id = 4, text = "The id variable from the person table is the same as the person_id variable in the inteview table")`
-`r hint(id = 5, text = "To find the statement you can filter on person_id")`
+`r hint(id = 1, text = "Look for a witness statement with a matching 'id'")`
+`r hint(id = 2, text = "Annabel Miller has a id of '16371'")`
+`r hint(id = 3, text = "Morty Schapiro has a id of '14887'")`
+`r hint(id = 4, text = "The id variable from the person table is the same as the 'person_id' variable in the inteview table")`
+`r hint(id = 5, text = "To find the statement you can filter on 'person_id'")`
 `r hint(id = 6, text = "")`
 
+<br/>
 
 #### Solution code
 ```{r eval=FALSE}
 # Read interview file
-interview <- vroom::vroom("raw-data/csv/interview.csv", 
+interview <- vroom(here("raw-data/interview.csv"), 
                           delim = ",")
 
 # Find Annabel Miller's statement
@@ -199,63 +235,118 @@ interview %>%
 :::
 
 
-</p>
-:::
+
 
 <button class="collapsible">
-
 Part 4
-
 </button>
-
 ::: content
 <p>
-## Part 4 - Who was at the gym? (Annabel)
+## Part 4.1 - Who was at the gym? (Annabel)
 Find out who Annabel saw
 
-`r hint(id = 6, text = "")`
-`r hint(id = 6, text = "")`
-`r hint(id = 6, text = "")`
-`r hint(id = 6, text = "")`
+`r hint(id = 1, text = "You need to find out who visited the gym at the gym at the time Annabel noticed someone.")`
+`r hint(id = 2, text = "Annabel also noticed that the last part of the members id was 48Z")`
+`r hint(id = 3, text = "You need two datasets")`
+`r hint(id = 4, text = "You need the 'get_fit_now_member' and 'get_fit_now_check_in' data sets.")`
+`r hint(id = 5, text = "You might be able to combine the data.")`
+`r hint(id = 6, text = "Using a function such as 'left_join' could work.")`
+`r hint(id = 7, text = "The dplyr and stringr package has some great functions that can help you along.")`
+`r hint(id = 8, text = "Regex :)")`
+`r hint(id = 9, text = "A combination of 'filter()' and 'str_detet()' is always great to use when extracting data about gym members.")`
+
+<br/>
+
+#### Solution
+```{r eval=FALSE}
+# Read data files
+get_fit_now_member <- vroom(here("raw-data/get_fit_now_member.csv"))
+get_fit_now_check_in <- vroom(here("raw-data/get_fit_now_check_in.csv"))
+
+# Join data
+fitness_person_checkin_combined <- dplyr::left_join(x = get_fit_now_member, y = get_fit_now_check_in, by = c("id" = "membership_id"))
+
+# Find people that were at the gym Annabel specified
+fitness_person_checkin_combined %>%
+    dplyr::filter(check_in_date == 20180109 &
+                      stringr::str_detect(id, "48Z"))
+
+
+```
+
+## Part 4.2 - Who owns the car that Morty saw?
+Figure out who of the two gym rats that own the car that Morty saw.
+
+`r hint(id = 1, text = "You can perhaps use the 'licence_id' to identify the perpetrator.")`
+`r hint(id = 2, text = "You might need to combine some tables in order to find the person of interest.")`
+`r hint(id = 3, text = "Remember that Morty saw a licence plate number that contained 'H42W'")`
+
+<br/>
 
 #### Solution code
 ```{r eval=FALSE}
 # Read data files
-get_fit_now_member <- vroom::vroom("raw-data/csv/get_fit_now_member.csv")
-get_fit_now_check_in <- vroom::vroom("raw-data/csv/get_fit_now_check_in.csv")
+driver_licence <- vroom(here("raw-data/drivers_license.csv"))
+    
+# Find licence ID of Joe and Jeremy
+person %>%
+    dplyr::filter(id %in% c(28819, 67318)) %>%
+    dplyr::select(c(name, license_id))
 
-test_pivot <- tidyr::pivot_wider(get_fit_now_member, names_from = "membership_status")
-# Pivot get_fit_now_check_in
-get_fit_now_member <- tidyr::pivot_longer(get_fit_now_member, cols = everything(), names_to = "id")
-fitness_person_checkin_combined <- dplyr::left_join(x = get_fit_now_member, y = get_fit_now_check_in, by = c("id" = "membership_id"))
+# Find car
+driver_licence %>%
+    dplyr::filter(id %in% c(173289, 423327))
 
-# Find Annabel Miller's statement
-interview %>% 
-    dplyr::filter(person_id == 16371) %>%
-    dplyr::select(transcript)
+# Combine data - Easier to read
+dplyr::left_join(x = person, y = driver_licence, by = c("license_id" = "id")) %>%
+    dplyr::filter(license_id %in% c(173289, 423327) &
+                      stringr::str_detect(plate_number, "H42W")) 
 
-# Find Morty Schapiro's statement
-interview %>% 
-    dplyr::filter(person_id == 14887) %>%
-    dplyr::select(transcript)
 ```
 
 </p>
 :::
 
-
-
-
-
-
+<button class="collapsible">
+Part 5
+</button>
+::: content
 <p>
-  
+### Congratulation! You have found the killer!
+
+
+
+or have you?
 </p>
+:::
+
+
+
+<br/>
+
+<br/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ```{=html}
 <style>
 .collapsible {
   background-color: #777;
+  margin-bottom: 10px;
   color: white;
   cursor: pointer;
   padding: 18px;
@@ -270,12 +361,14 @@ interview %>%
   background-color: #555;
 }
 
+
 .content {
   padding: 0 18px;
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.2s ease-out;
   background-color: #f1f1f1;
+
 }
 </style>
 ```
