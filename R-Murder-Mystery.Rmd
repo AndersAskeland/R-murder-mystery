@@ -11,6 +11,7 @@ editor_options:
 
 ```{r setup, echo=FALSE}
 source("R/functions.R")
+
 ```
 
 There's been a Murder in R City! The R Murder Mystery is designed to be
@@ -35,26 +36,26 @@ course, you'll be able to solve the mystery.
 > scene report from the police department's database.
 
 ## The data
-You have the following files at your disposal to solve the mystery:
-![File structure](images/file_structure.png) You might notice that
+You have the following files at your disposal. You need to use several of them to be able to solve the mystery:
+![File structure](images/file_structure.png) 
+
+You might notice that
 certain variables have a key and arrow associated to them.
 
 ![Key](images/paste-27ECAE2C.png)
 **Key**: A unique identifier for each row in the table 
 
 ![Arrow](images/paste-9621EB24.png){width="82"}
-**Arrow**: Used to reference data in one table to those in another table (i.e. they are the same in both tables).
+**Arrow**: Used to reference data in one table to those in another table (i.e. they are identical in both tables).
 
 <br/>
 
 #### Get data
-Download the data by running:
+Download the data here: [Data for R - Murder mystery](https://github.com/AndersAskeland/R-murder-mystery/blob/main/data-raw/r-murder-mystery.zip?raw=true)
 
-```{r eval=FALSE, class.source = 'fold-show'}
-******
-```
-
-PS: The police have no good system to collect crime scene reports. Therefore the file structure of the crime scene reports is somewhat different compared to the other data.
+Note:
+* The police have no good system to collect crime scene reports. Therefore the file structure of the crime scene reports is somewhat different compared to the other data.
+* The download you downloaded is the raw data. It is good pracise to place this data inside a data-raw folder.
 
 ## How to solve the mystery 
 ### Hard
@@ -65,13 +66,13 @@ to follow along with the guided section below.
 
 ### Guided
 
-Begin in by revealing part 1. Hereafter reveal new section as you
+Begin in by revealing part 1. Reveal new sections as you
 complete the previous one.
 
 If you at any point get stuck you can reveal hints to help yourselves
-along. You can also view a code example, if the hints are not enough.
+along. You can also view the solution code for each section. Begin by revealing the this hint.
 
-`r hint(id = 0, text = "If you can, try to refrain from using hints. If you are stuck at a section for more than 10 minutes, reveal the first hint and repeat. The last hint in any given sequence is the solution for that given part.")`
+`r hint(id = 0, text = "Try to refrain from using hints. However, if you get stuck, begin by reveal the first hint and repeat. The first hint is: remember to load packages or use package namespaces '::'.")`
 
 <br/>
 
@@ -82,7 +83,7 @@ Part 0
 ::: content
 <p>
 ## Part 0: Read data
-Download and read the data. If you ever make use of the code solutions, the data for those are stored in the relative path of "raw-data/". You can use `here()` to set a relative path.
+Download and read in the data. If you ever make use of the code solutions, the data for those are stored in the relative path of "data-raw/". You can use the `here()` function to set a relative path.
 
 `r hint(id = 1, text = "The data is packaged. You might need to use a tool to extract it.")`
 `r hint(id = 2, text = "Use 'unzip()' to extract the data.")`
@@ -94,8 +95,8 @@ Download and read the data. If you ever make use of the code solutions, the data
 
 ```{r eval=FALSE}
 # Unzip data
-unzip(here("raw-data/r-murder-mystery.zip"),
-      exdir = here("raw-data/"))
+unzip(here("data-raw/r-murder-mystery.zip"),
+      exdir = here("data-raw/"))
 
 ```
 
@@ -114,47 +115,46 @@ Part 1
 
 ## Part 1: Investigate the crime scene report
 
-Investigate the crime scene report for any usable information. For this
+Investigate the crime scene report for valuable information. For this
 task you will need to read in the crime scene file, and filter and
-select the column the column with the report interesting for you.
+select the column and that you need.
 
-`r hint(id = 1, text = "You want to look at crime scene reports and look for a murder that happened on jan. 15, 2018 in R City")`
-`r hint(id = 2, text = "The data is seperated into seperate data files. Can you recall a method to combine them?")`
-`r hint(id = 3, text = "It might be a good idea to use a function to read in each data file.")`
-`r hint(id = 4, text = "You need to use dir_ls() and map_dfr() to be able to read the data")`
-`r hint(id = 5, text = "Data can be read with vroom() or read_csv()")`
-`r hint(id = 6, text = "You should use the dplyr functions filter and select")`
+`r hint(id = 1, text = "You want to look at the crime scene reports and look for a murder that happened on jan. 15, 2018 in R City")`
+`r hint(id = 2, text = "The data is stored in seperate data files. Can you recall a method to combine them?")`
+`r hint(id = 3, text = "It might be a good idea to use create a function to read in each data file.")`
+`r hint(id = 4, text = "You can use 'dir_ls()' and 'map_dfr()' to read the data")`
+`r hint(id = 5, text = "Data can be read with 'vroom()' or 'read_csv()'")`
+`r hint(id = 6, text = "You can use dplyr verbs such as filter and select to find the data you are interested in.")`
 
 <br/>
 
-#### Solution code
-
+#### Solution
 ```{r eval=FALSE}
 # Function to read data
 read_crime_scene_report <- function(file_path) {
-    vroom::vroom(
-        here::here(file_path),
-        col_types = vroom::cols(
-            date = vroom::col_character(),
-            type = vroom::col_character(),
-            description = vroom::col_character(),
-            city = vroom::col_character()
+    vroom(
+        here(file_path),
+        col_types = cols(
+            date = col_character(),
+            type = col_character(),
+            description = col_character(),
+            city = col_character()
         )
     )
 }
 
 # Get a list of directories
-crime_scene_report_files <- dir_ls(here("raw-data/crime_scene_report/"))
+crime_scene_report_files <- dir_ls(here("data-raw/crime_scene_report/"))
     
 # Read data - This can take some time
 crime_scene_report_df <- map_dfr(crime_scene_report_files, read_crime_scene_report)
 
 # Find crime scene report
 crime_scene_report_df %>% 
-    dplyr::filter(date == "20180115" & 
+    filter(date == "20180115" & 
                       type == "murder" &
                       city == "R City") %>%
-    dplyr::select(description)
+    select(description)
 ```
 
 </p>
@@ -172,28 +172,27 @@ Part 2
 
 Find the witness statement.
 
-`r hint(id = 1, text = "You cant find the witness statement before finding out which persons gave the statmenents.")`
-`r hint(id = 2, text = "Look in the person data, and look for person that lives at the last house on Northwestern Dr and a person named Annabel that lives on Franklin Ave")`
-`r hint(id = 3, text = "To find the person that lives on Northwestern dr you can use the dplyr function arrange() to sort address numbers")`
-`r hint(id = 4, text = "To find Annabel you  can use regular expresions and the stringr function str_detect()")`
-`r hint(id = 6, text = "Look in the person data, and look for person that lives at the last house on Northwestern Dr and a person named Annabel that lives on Franklin Ave")`
+`r hint(id = 1, text = "You will not be able to locate the witness statement before finding out which persons gave the statmenents.")`
+`r hint(id = 2, text = "Investigate the person data file, and look for a person that lives at the last house on Northwestern Dr and a person named Annabel that lives on Franklin Ave.")`
+`r hint(id = 3, text = "To find the person that lives on Northwestern dr you can use the dplyr function 'arrange()' to sort address numbers.")`
+`r hint(id = 4, text = "To find Annabel you  can use a regular expresions and the stringr function 'str_detect()'.")`
 
 <br/>
 
-#### Solution code
+#### Solution
 ```{r eval=FALSE}
 # Read person data
-person <- vroom(here("raw-data/person.csv"))
+person <- vroom(here("data-raw/person.csv"))
 
 # Find person living on the last house on Northwestern Dr
 person %>% 
-    dplyr::filter(address_street_name == "Northwestern Dr") %>%
-    dplyr::arrange(desc(address_number))
+    filter(address_street_name == "Northwestern Dr") %>%
+    arrange(desc(address_number))
 
 # Find the person named Annabel living on Franklin Ave
 person %>% 
-    dplyr::filter(address_street_name == "Franklin Ave" &
-                     stringr::str_detect(name, "Annabel"))
+    filter(address_street_name == "Franklin Ave" &
+                     str_detect(name, "Annabel"))
 ```
 </p>
 :::
@@ -207,29 +206,29 @@ Part 3
 ## Part 3 - Look at witness statement
 Find the witness statements.
 `r hint(id = 1, text = "Look for a witness statement with a matching 'id'")`
-`r hint(id = 2, text = "Annabel Miller has a id of '16371'")`
-`r hint(id = 3, text = "Morty Schapiro has a id of '14887'")`
-`r hint(id = 4, text = "The id variable from the person table is the same as the 'person_id' variable in the inteview table")`
-`r hint(id = 5, text = "To find the statement you can filter on 'person_id'")`
-`r hint(id = 6, text = "")`
+`r hint(id = 2, text = "Vroom might not be able to guess the file delimited. Check the '?vroom' help file to see if there is any arguments you can use to read the file.")`
+`r hint(id = 3, text = "Annabel Miller has a 'id' of '16371'")`
+`r hint(id = 4, text = "Morty Schapiro has a 'id' of '14887'")`
+`r hint(id = 5, text = "The 'id' variable from the person table is the same as the 'person_id' variable in the inteview table")`
+`r hint(id = 6, text = "To find the statement you can filter on 'person_id'")`
 
 <br/>
 
 #### Solution code
 ```{r eval=FALSE}
 # Read interview file
-interview <- vroom(here("raw-data/interview.csv"), 
+interview <- vroom(here("data-raw/interview.csv"), 
                           delim = ",")
 
 # Find Annabel Miller's statement
 interview %>% 
-    dplyr::filter(person_id == 16371) %>%
-    dplyr::select(transcript)
+    filter(person_id == 16371) %>%
+    select(transcript)
 
 # Find Morty Schapiro's statement
 interview %>% 
-    dplyr::filter(person_id == 14887) %>%
-    dplyr::select(transcript)
+    filter(person_id == 14887) %>%
+    select(transcript)
 ```
 </p>
 :::
@@ -245,11 +244,11 @@ Part 4
 ## Part 4.1 - Who was at the gym? (Annabel)
 Find out who Annabel saw
 
-`r hint(id = 1, text = "You need to find out who visited the gym at the gym at the time Annabel noticed someone.")`
-`r hint(id = 2, text = "Annabel also noticed that the last part of the members id was 48Z")`
-`r hint(id = 3, text = "You need two datasets")`
+`r hint(id = 1, text = "You need to find out who visited the gym at the time Annabel noticed someone.")`
+`r hint(id = 2, text = "Annabel also noticed that the last part of the members id was '48Z'.")`
+`r hint(id = 3, text = "You might need to use two datasets at the same time.")`
 `r hint(id = 4, text = "You need the 'get_fit_now_member' and 'get_fit_now_check_in' data sets.")`
-`r hint(id = 5, text = "You might be able to combine the data.")`
+`r hint(id = 5, text = "You might be able to combine the data somehow.")`
 `r hint(id = 6, text = "Using a function such as 'left_join' could work.")`
 `r hint(id = 7, text = "The dplyr and stringr package has some great functions that can help you along.")`
 `r hint(id = 8, text = "Regex :)")`
@@ -260,16 +259,16 @@ Find out who Annabel saw
 #### Solution
 ```{r eval=FALSE}
 # Read data files
-get_fit_now_member <- vroom(here("raw-data/get_fit_now_member.csv"))
-get_fit_now_check_in <- vroom(here("raw-data/get_fit_now_check_in.csv"))
+get_fit_now_member <- vroom(here("data-raw/get_fit_now_member.csv"))
+get_fit_now_check_in <- vroom(here("data-raw/get_fit_now_check_in.csv"))
 
 # Join data
-fitness_person_checkin_combined <- dplyr::left_join(x = get_fit_now_member, y = get_fit_now_check_in, by = c("id" = "membership_id"))
+fitness_person_checkin_combined <- left_join(x = get_fit_now_member, y = get_fit_now_check_in, by = c("id" = "membership_id"))
 
 # Find people that were at the gym Annabel specified
 fitness_person_checkin_combined %>%
-    dplyr::filter(check_in_date == 20180109 &
-                      stringr::str_detect(id, "48Z"))
+    filter(check_in_date == 20180109 &
+                      str_detect(id, "48Z"))
 
 
 ```
@@ -279,29 +278,30 @@ Figure out who of the two gym rats that own the car that Morty saw.
 
 `r hint(id = 1, text = "You can perhaps use the 'licence_id' to identify the perpetrator.")`
 `r hint(id = 2, text = "You might need to combine some tables in order to find the person of interest.")`
-`r hint(id = 3, text = "Remember that Morty saw a licence plate number that contained 'H42W'")`
+`r hint(id = 3, text = "Morty saw a licence plate number that contained 'H42W'")`
 
 <br/>
 
-#### Solution code
+#### Solution
 ```{r eval=FALSE}
 # Read data files
-driver_licence <- vroom(here("raw-data/drivers_license.csv"))
+driver_licence <- vroom(here("data-raw/drivers_license.csv"))
     
 # Find licence ID of Joe and Jeremy
 person %>%
-    dplyr::filter(id %in% c(28819, 67318)) %>%
-    dplyr::select(c(name, license_id))
+    filter(id %in% c(28819, 67318)) %>%
+    select(c(name, license_id))
 
 # Find car
 driver_licence %>%
-    dplyr::filter(id %in% c(173289, 423327))
+    ´filter(id %in% c(173289, 423327))
 
 # Combine data - Easier to read
-dplyr::left_join(x = person, y = driver_licence, by = c("license_id" = "id")) %>%
-    dplyr::filter(license_id %in% c(173289, 423327) &
-                      stringr::str_detect(plate_number, "H42W")) 
-
+combined_data <- left_join(x = person, y = driver_licence, by = c("license_id" = "id")) %>%
+    filter(license_id %in% c(173289, 423327) &
+                      str_detect(plate_number, "H42W")) 
+# Print data
+combined_data
 ```
 
 </p>

@@ -11,7 +11,7 @@ import shutil
 # Main
 def main():
     # SQL connection
-    con = sqlite3.connect("raw-data/sql/sql-murder-mystery.db")
+    con = sqlite3.connect("data-raw/sql/sql-murder-mystery.db")
 
     # Read tables
     read_table("interview", con)
@@ -33,24 +33,24 @@ def main():
     # pivot_data()
 
     # Remove interview data
-    if os.path.exists("raw-data/crime_scene_report.csv"):
-        os.remove("raw-data/crime_scene_report.csv")
+    if os.path.exists("data-raw/crime_scene_report.csv"):
+        os.remove("data-raw/crime_scene_report.csv")
 
     # Zip data
     zip_data()
 
     # Move file
-    shutil.move("r-murder-mystery.zip", "raw-data/r-murder-mystery.zip")
+    shutil.move("r-murder-mystery.zip", "data-raw/r-murder-mystery.zip")
 
     # Remove files
-    os.remove("raw-data/drivers_license.csv")
-    os.remove("raw-data/facebook_event_checkin.csv")
-    os.remove("raw-data/get_fit_now_check_in.csv")
-    os.remove("raw-data/get_fit_now_member.csv")
-    os.remove("raw-data/income.csv")
-    os.remove("raw-data/interview.csv")
-    os.remove("raw-data/person.csv")
-    shutil.rmtree("raw-data/crime_scene_report")
+    os.remove("data-raw/drivers_license.csv")
+    os.remove("data-raw/facebook_event_checkin.csv")
+    os.remove("data-raw/get_fit_now_check_in.csv")
+    os.remove("data-raw/get_fit_now_member.csv")
+    os.remove("data-raw/income.csv")
+    os.remove("data-raw/interview.csv")
+    os.remove("data-raw/person.csv")
+    shutil.rmtree("data-raw/crime_scene_report")
 
 
 
@@ -69,40 +69,40 @@ def read_table(table, con):
     df = pd.DataFrame(sql_query)
 
     # Write CSV
-    df.to_csv(f"raw-data/{table}.csv", index=False)
+    df.to_csv(f"data-raw/{table}.csv", index=False)
 
 def split_crime_scene_report():
     # Make dir
-    os.mkdir("raw-data/crime_scene_report")
+    os.mkdir("data-raw/crime_scene_report")
     
     # Read data
-    crime_scene_report = pd.read_csv("raw-data/crime_scene_report.csv")
+    crime_scene_report = pd.read_csv("data-raw/crime_scene_report.csv")
 
     # Split data
     for i in range(len(crime_scene_report)):
         person_id = crime_scene_report.iloc[i, 0]
-        crime_scene_report.loc[[i]].to_csv(f"raw-data/crime_scene_report/{person_id}.csv", index=False)
+        crime_scene_report.loc[[i]].to_csv(f"data-raw/crime_scene_report/{person_id}.csv", index=False)
 
 def pivot_data():
-    df = pd.read_csv("raw-data/get_fit_now_member.csv")
+    df = pd.read_csv("data-raw/get_fit_now_member.csv")
 
     df = df.pivot(columns="membership_status")
 
-    df.to_csv("raw-data/test.csv", index=False)
+    df.to_csv("data-raw/test.csv", index=False)
 
 
 def r_city():
     # read data
-    df = pd.read_csv("raw-data/crime_scene_report.csv")
+    df = pd.read_csv("data-raw/crime_scene_report.csv")
 
     # Replace SQL city with R city
     df.loc[df['city'] == "SQL City", 'city'] = "R City"
 
     # Write
-    df.to_csv("raw-data/crime_scene_report.csv")
+    df.to_csv("data-raw/crime_scene_report.csv")
 
 def zip_data():
-    shutil.make_archive("r-murder-mystery", 'zip', "raw-data/")
+    shutil.make_archive("r-murder-mystery", 'zip', "data-raw/")
 
 
 # Run
