@@ -24,4 +24,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Test
-        run: cp R-Murder-Mystery.Rmd index.html
+        run: cp ${{ github.workspace }}/R-Murder-Mystery.Rmd ${{ github.workspace }}/index.html
