@@ -9,9 +9,7 @@ editor_options:
     wrap: 72
 ---
 
-```{r setup, echo=FALSE}
-source("R/functions.R")
-```
+
 
 There's been a Murder in R City! The R Murder Mystery is designed to be
 both a lesson to learn R concepts and commands and a fun game for R
@@ -46,7 +44,8 @@ certain variables have a key and arrow associated to them.
 
 Download the data by running:
 
-```{r eval=FALSE, class.source = 'fold-show'}
+
+```{.r .fold-show}
 ******
 ```
 
@@ -67,7 +66,12 @@ complete the previous one.
 If you at any point get stuck you can reveal hints to help yourselves
 along. You can also view a code example, if the hints are not enough.
 
-`r hint(id = 0, text = "If you can, try to refrain from using hints. If you are stuck at a section for more than 10 minutes, reveal the first hint and repeat. The last hint in any given sequence is the solution for that given part.")`
+
+<details style='margin-bottom: 1rem'><summary><strong><em>Hint 0: Click to reveal!</em></strong></summary>
+<blockquote><p>
+If you can, try to refrain from using hints. If you are stuck at a section for more than 10 minutes, reveal the first hint and repeat. The last hint in any given sequence is the solution for that given part.
+</p></blockquote>
+</details>
 
 <button class="collapsible">
 
@@ -84,13 +88,29 @@ Investigate the crime scene report for any usable information. For this
 task you will need to read in the crime scene file, and filter and
 select the column the column with the report interesting for you.
 
-`r hint(id = 1, text = "You want to look at the crime_scene_report.csv file and look for a murder that happened on jan. 15, 2018 in R City")`
-`r hint(id = 2, text = "Read data with vroom() or read_csv()")`
-`r hint(id = 3, text = "You should use the dplyr functions filter and select")`
+
+<details style='margin-bottom: 1rem'><summary><strong><em>Hint 1: Click to reveal!</em></strong></summary>
+<blockquote><p>
+You want to look at the crime_scene_report.csv file and look for a murder that happened on jan. 15, 2018 in R City
+</p></blockquote>
+</details>
+
+<details style='margin-bottom: 1rem'><summary><strong><em>Hint 2: Click to reveal!</em></strong></summary>
+<blockquote><p>
+Read data with vroom() or read_csv()
+</p></blockquote>
+</details>
+
+<details style='margin-bottom: 1rem'><summary><strong><em>Hint 3: Click to reveal!</em></strong></summary>
+<blockquote><p>
+You should use the dplyr functions filter and select
+</p></blockquote>
+</details>
 
 #### Solution code
 
-```{r eval=FALSE}
+
+```r
 # Read data
 crime_scene_report <- vroom::vroom("raw-data/csv/crime_scene_report.csv")
 
@@ -118,14 +138,40 @@ Part 2
 
 Find the witness statement.
 
-`r hint(id = 1, text = "You cant find the witness statement before finding out which persons gave the statmenents.")`
-`r hint(id = 2, text = "Look in the person data, and look for person that lives at the last house on Northwestern Dr and a person named Annabel that lives on Franklin Ave")`
-`r hint(id = 3, text = "To find the person that lives on Northwestern dr you can use the dplyr function arrange() to sort address numbers")`
-`r hint(id = 4, text = "To find Annabel you  can use regular expresions and the stringr function str_detect()")`
-`r hint(id = 6, text = "Look in the person data, and look for person that lives at the last house on Northwestern Dr and a person named Annabel that lives on Franklin Ave")`
+
+<details style='margin-bottom: 1rem'><summary><strong><em>Hint 1: Click to reveal!</em></strong></summary>
+<blockquote><p>
+You cant find the witness statement before finding out which persons gave the statmenents.
+</p></blockquote>
+</details>
+
+<details style='margin-bottom: 1rem'><summary><strong><em>Hint 2: Click to reveal!</em></strong></summary>
+<blockquote><p>
+Look in the person data, and look for person that lives at the last house on Northwestern Dr and a person named Annabel that lives on Franklin Ave
+</p></blockquote>
+</details>
+
+<details style='margin-bottom: 1rem'><summary><strong><em>Hint 3: Click to reveal!</em></strong></summary>
+<blockquote><p>
+To find the person that lives on Northwestern dr you can use the dplyr function arrange() to sort address numbers
+</p></blockquote>
+</details>
+
+<details style='margin-bottom: 1rem'><summary><strong><em>Hint 4: Click to reveal!</em></strong></summary>
+<blockquote><p>
+To find Annabel you  can use regular expresions and the stringr function str_detect()
+</p></blockquote>
+</details>
+
+<details style='margin-bottom: 1rem'><summary><strong><em>Hint 6: Click to reveal!</em></strong></summary>
+<blockquote><p>
+Look in the person data, and look for person that lives at the last house on Northwestern Dr and a person named Annabel that lives on Franklin Ave
+</p></blockquote>
+</details>
 
 #### Solution code
-```{r eval=FALSE}
+
+```r
 # Read person data
 person <- vroom::vroom("raw-data/csv/person.csv")
 
