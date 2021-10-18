@@ -11,4 +11,4 @@ jobs:
         with:
           input_file: R-Murder-Mystery.Rmd
           output_file: test2.html
-    output_format: html_document
+          output_format: html_document
