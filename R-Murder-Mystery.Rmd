@@ -15,7 +15,7 @@ source("R/functions.R")
 
 There's been a Murder in R City! The R Murder Mystery is designed to be
 both a lesson to learn R concepts and commands and a fun game for R
-users to solve an intriguing crime. The mystery is directly based on
+users to solve an intriguing crime. The mystery is directly  based on
 [The SQL Murder Mystery](https://mystery.knightlab.com), which again was
 inspired by [a crime in the neighboring Terminal
 City](https://github.com/veltman/clmystery).
