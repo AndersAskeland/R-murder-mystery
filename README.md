@@ -17,3 +17,11 @@ To solve the mystery one must use various R functions and methods.
 > use R to navigate through this vast network of information. Your first
 > step to solving the mystery is to retrieve the corresponding crime
 > scene report from the police department's database.
+
+## Walkthrough
+You can view a walkthrough [here](http://askeland.me/R-murder-mystery/).
+
+## Copyright and license
+Original code and text is under the [Creative Commons CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+
+Text describing mystery and SQL data files are attributed to [The SQL Murder Mystery](https://mystery.knightlab.com), and is also under the Creative Commons CC BY-SA 4.0 license.
