@@ -20,8 +20,7 @@ users to solve an intriguing crime. The mystery is directly based on
 inspired by [a crime in the neighboring Terminal
 City](https://github.com/veltman/clmystery).
 
-Through the usage of various functions and methods learned during the
-course, you'll be able to solve the mystery.
+To solve the mystery one must use various R functions and methods.
 
 ## The mystery
 
@@ -33,6 +32,8 @@ course, you'll be able to solve the mystery.
 > use R to navigate through this vast network of information. Your first
 > step to solving the mystery is to retrieve the corresponding crime
 > scene report from the police department's database.
+
+
 ## The data
 You have the following files at your disposal. You need to use several of them to be able to solve the mystery:
 ![File structure](images/file_structure.png) 
@@ -53,12 +54,11 @@ Download the data here: [Data for R - Murder mystery](https://github.com/AndersA
 
 NOTE:
 
-* This is a test!   
 * The police have no good system to collect crime scene reports. Therefore the file structure of the crime scene reports is somewhat different compared to the other data.
 * The download you downloaded is the raw data. It is good practice to place this data inside a data-raw folder.
 
 ## How to solve the mystery 
-### Hard
+### Without help
 
 You can in in fact solve the entire mystery based on the information
 given above. This can be difficult, and as such, most people are recommended
@@ -91,7 +91,7 @@ Download and read in the data. If you ever make use of the code solutions, the d
 
 <br/>
 
-#### Solution code
+#### Solution
 
 ```{r eval=FALSE}
 # Unzip data
@@ -209,7 +209,7 @@ Find the witness statements.
 
 <br/>
 
-#### Solution code
+#### Solution
 ```{r eval=FALSE}
 # Read interview file
 interview <- vroom(here("data-raw/interview.csv"), 
