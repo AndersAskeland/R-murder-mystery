@@ -4,8 +4,10 @@
 
 # Mac stuff
 .DS_Store
+
 # Session Data files
 .RData
+.vscode
 
 # User-specific files
 .Ruserdata
