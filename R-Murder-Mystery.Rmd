@@ -54,7 +54,7 @@ Download the data here: [Data for R - Murder mystery](https://github.com/AndersA
 NOTE:
 
 * The police have no good system to collect crime scene reports. Therefore the file structure of the crime scene reports is somewhat different compared to the other data.
-* The download you downloaded is the  raw data. It is good pracise to place this data inside a data-raw folder.
+* The download you downloaded is the raw data. It is good pracise to place this data inside a data-raw folder.
 
 ## How to solve the mystery 
 ### Hard
