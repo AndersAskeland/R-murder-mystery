@@ -21,14 +21,11 @@ jobs:
       - uses: r-lib/actions/setup-r@v1
 
       - uses: r-lib/actions/setup-renv@v1
-  
-      - name: Install dependencies
-        run: Rscript -e 'install.packages("rmarkdown")'
        
       - name: Render Rmarkdown files
         run: |
           RMD_PATH=($(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '[.]Rmd$'))
-          Rscript -e 'for (f in commandArgs(TRUE)) if (file.exists(f)) rmarkdown::render(f)' ${RMD_PATH[*]}
+          Rscript -e 'rmarkdown::render(input = "R-Murder-Mystery.Rmd", output_format = "html_document", output_file = "index.html")'
 
       - name: Commit results
         run: |
