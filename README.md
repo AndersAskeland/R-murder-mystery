@@ -19,7 +19,7 @@ To solve the mystery one must use various R functions and methods.
 > scene report from the police department's database.
 
 ## Walkthrough
-You can view a walkthrough [here](http://askeland.me/R-murder-mystery/).
+You can view a walkthrough [here](http://r-murder-mystery.askeland.me).
 
 ## Copyright and license
 Original code and text is under the [Creative Commons CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
